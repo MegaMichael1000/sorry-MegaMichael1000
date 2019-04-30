@@ -315,6 +315,10 @@ void draw() {
 
 void mousePressed() {
   mouseCoords = gameBoard.getCoords(mouseX,mouseY);
+  if (mouseY >= height/10)
+    mouseCoords[0] = (int)mouseCoords[0];
+  if (mouseX >= width/20)
+    mouseCoords[1] = (int)mouseCoords[1];
   if (winner == -1) {
     if (mouseButton == LEFT) {
       if (mouseX >= 580 && mouseX <= 700) {
