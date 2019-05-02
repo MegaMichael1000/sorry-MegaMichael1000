@@ -461,25 +461,13 @@ public class Board {
         if ((movingPawn.row() == row && movingPawn.col() == col) && (movingPawn.getId() % 2 == id % 2 && movingPawn.isValidForward())) {
           if (!movingPawn.isActive() && !movingPawn.isSelected()) {
             movingPawn.moveForward(spaces);
-            for (Slide s: slides) {
-              if (movingPawn.row() == s.row() && movingPawn.col() == s.col()) {
-                if (s.getType() == 0 && s.getPlayer() != movingPawn.getId())
-                  movingPawn.slide();
-              }
-            }
             return true;
           }
         }
       } else {
         if ((movingPawn.row() == row && movingPawn.col() == col) && (movingPawn.getId() == id && movingPawn.isValidForward())) {
           if (!movingPawn.isActive() && !movingPawn.isSelected()) {
-            movingPawn.moveForward(spaces);
-            for (Slide s: slides) {
-              if (movingPawn.row() == s.row() && movingPawn.col() == s.col()) {
-                if (s.getType() == 0 && s.getPlayer() != movingPawn.getId())
-                  movingPawn.slide();
-              }
-            }
+            movingPawn.moveForward(spaces); //<>//
             return true;
           }
         }
@@ -494,28 +482,27 @@ public class Board {
       if (teams) {
         if ((movingPawn.row() == row && movingPawn.col() == col) && (movingPawn.getId() % 2 == id % 2) && movingPawn.isValidBackward()) {
           movingPawn.moveBackward(spaces);
-          for (Slide s: slides) {
-            if (movingPawn.row() == s.row() && movingPawn.col() == s.col()) {
-              if (s.getType() == 0 && s.getPlayer() != movingPawn.getId())
-                movingPawn.slide();
-            }
-          }
           return true;
         }
       } else {
         if ((movingPawn.row() == row && movingPawn.col() == col) && (movingPawn.getId() == id) && movingPawn.isValidBackward()) {
           movingPawn.moveBackward(spaces);
-          for (Slide s: slides) {
-            if (movingPawn.row() == s.row() && movingPawn.col() == s.col()) {
-              if (s.getType() == 0 && s.getPlayer() != movingPawn.getId())
-                movingPawn.slide();
-            }
-          }
           return true;
         }
       }
     }
     return false;
+  }
+  
+  public void slideCheck() {
+    for (Pawn p: pawns) {
+      for (Slide s: slides) {
+        if (p.row() == s.row() && p.col() == s.col()) {
+          if (s.getType() == 0 && s.getPlayer() != p.getId())
+            p.startSlide();
+        }
+      }
+    }
   }
   
   public boolean moveAhead(int row1, int col1, int row2, int col2) {
@@ -651,11 +638,11 @@ public class Board {
     for (Slide s: slides) {
       if (pawn1.row() == s.row() && pawn1.col() == s.col()) {
         if (s.getType() == 0 && s.getPlayer() != pawn1.getId())
-          pawn1.slide();
+          pawn1.startSlide();
       }
       if (pawn2.row() == s.row() && pawn2.col() == s.col()) {
         if (s.getType() == 0 && s.getPlayer() != pawn2.getId())
-          pawn2.slide();
+          pawn2.startSlide();
       }
     }
     return true;

@@ -324,8 +324,8 @@ void mousePressed() {
       if (mouseX >= 580 && mouseX <= 700) {
         if (mouseY >= (height/2)-80 && mouseY <= (height/2)+80) {
           if (!DRAWN_CARD) {
-            drawOne();
-            //card1 = new Card(5,3);
+            //drawOne();
+            card1 = new Card(12,-1);
             DRAWN_CARD = true;
             TURN_SKIPPED = false;
             TURN_SKIPPED2 = false;
@@ -513,10 +513,11 @@ void mousePressed() {
             if (VALID_MOVE)
               MOVED_PAWN = gameBoard.pawnForward(mouseCoords[0],mouseCoords[1],card1.cardValue(),playerTurn,TEAMS);
           }
+          bumpCheck(SPLIT);
+          slidePawns();
         }
       }
-      bumpCheck(SPLIT);
-      slidePawns();
+      
       if (TURN_SKIPPED) {
         validMoves = -1;
         nextTurn();
@@ -853,6 +854,7 @@ void nextTurn() {
 }
 
 void slidePawns() {
+  gameBoard.slideCheck();
   SLIDE = gameBoard.slidingPawns();
   if (SLIDE) {
     bumpedPawn = gameBoard.slideMove();
@@ -861,6 +863,7 @@ void slidePawns() {
       gameBoard.checkLead();
     }
   }
+  gameBoard.slideCheck();
   SLIDE = gameBoard.slidingPawns();
   if (SLIDE) {
     slidePawns();

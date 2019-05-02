@@ -257,7 +257,7 @@ public class Pawn extends BoardItem {
   public void validateBackward() {validBackward = true;}
   public void updateSpaces() {spacesLeft = spaceMap[rowId][colId];}
   
-  public void slide() {slide = true;}
+  public void startSlide() {slide = true;}
   public void endSlide() {slide = false;}
   
   public void activate() {
