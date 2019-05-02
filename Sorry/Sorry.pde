@@ -324,8 +324,8 @@ void mousePressed() {
       if (mouseX >= 580 && mouseX <= 700) {
         if (mouseY >= (height/2)-80 && mouseY <= (height/2)+80) {
           if (!DRAWN_CARD) {
-            //drawOne();
-            card1 = new Card(12,-1);
+            drawOne();
+            //card1 = new Card(12,-1);
             DRAWN_CARD = true;
             TURN_SKIPPED = false;
             TURN_SKIPPED2 = false;
