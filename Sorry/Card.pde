@@ -130,10 +130,10 @@ public class Card {
     textAlign(CENTER,CENTER);
     if (value == 13) {
       textSize(30);
-      text("SORRY!",0,-5);
+      text("SORRY!",0,-1);
     } else {
       textSize(50);
-      text(value,0,-5);
+      text(value,0,-1);
     }
     popMatrix();
   }

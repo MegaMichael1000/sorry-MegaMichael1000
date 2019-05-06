@@ -43,11 +43,6 @@ int validMoves;
 int splitSpaces;
 int bumpedPawn;
 int targetPawn;
-ArrayList<Pawn> redPawns;
-ArrayList<Pawn> bluePawns;
-ArrayList<Pawn> yellowPawns;
-ArrayList<Pawn> greenPawns;
-String test;
 
 void setup() {
   size(980,600);
@@ -74,10 +69,6 @@ void setup() {
   boardData[15][11] = 2;
   boardData[11][0] = 3;
   gameBoard = new Board(width/20,height/10,16,16,30);
-  redPawns = new ArrayList<Pawn>();
-  bluePawns = new ArrayList<Pawn>();
-  yellowPawns = new ArrayList<Pawn>();
-  greenPawns = new ArrayList<Pawn>();
   space1 = new Space(1,4,1,0);
   gameBoard.addSpace(space1);
   space1 = new Space(4,14,1,1);
@@ -224,37 +215,37 @@ void draw() {
       }
       switch(playerTurn) {
         case 0:
-          text("Red's turn",290,20);
+          text("Red's turn",290,25);
           break;
         case 1:
-          text("Blue's turn",290,20);
+          text("Blue's turn",290,25);
           break;
         case 2:
-          text("Yellow's turn",290,20);
+          text("Yellow's turn",290,25);
           break;
         case 3:
-          text("Green's turn",290,20);
+          text("Green's turn",290,25);
           break;
       }
     } else {
       if (TEAMS) {
         if (winner == 0)
-          text("Red and Yellow win!",300,20);
+          text("Red and Yellow win!",300,25);
         else
-          text("Green and Blue win!",300,20);
+          text("Green and Blue win!",300,25);
       } else {
         switch(winner) {
           case 0:
-            text("Red wins!",300,20);
+            text("Red wins!",300,25);
             break;
           case 1:
-            text("Blue wins!",300,20);
+            text("Blue wins!",300,25);
             break;
           case 2:
-            text("Yellow wins!",300,20);
+            text("Yellow wins!",300,25);
             break;
           case 3:
-            text("Green wins!",300,20);
+            text("Green wins!",300,25);
             break;
         }
       }
@@ -269,22 +260,22 @@ void draw() {
     fill(0);
     textSize(50);
     textAlign(CENTER,CENTER);
-    text("Start",width/2,400);
+    text("Start",width/2-1,405);
     textSize(20);
-    text("* Teams: Red and Yellow vs Blue and Green (4 players required)",width/2,550);
+    text("* Teams: Red and Yellow vs Blue and Green (4 players required)",width/2,555);
     textSize(35);
     if (SPECIAL_CARDS)
-      text("Enabled",650,235);
+      text("Enabled",650,239);
     else
-      text("Disabled",650,235);
+      text("Disabled",650,239);
     if (TEAMS)
-      text("Enabled",650,295);
+      text("Enabled",650,299);
     else
-      text("Disabled",650,295);
+      text("Disabled",650,299);
     textAlign(LEFT,CENTER);
-    text("Players:",230,175);
-    text("Special cards:",230,235);
-    text("Teams*:",230,295);
+    text("Players:",230,180);
+    text("Special cards:",230,240);
+    text("Teams*:",230,300);
     strokeWeight(5);
     stroke(255,0,0);
     if (ACTIVE_PLAYERS[0])
