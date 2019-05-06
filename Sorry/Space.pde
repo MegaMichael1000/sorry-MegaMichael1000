@@ -55,10 +55,10 @@ public class Space extends BoardItem {
     fill(0);
     switch (spaceType) {
       case 1:
-        text("S",cellSize/1.92,(cellSize/2.2)+2);
+        text("S",(cellSize/1.92)-0.5,(cellSize/2.2)+2);
         break;
       case 2:
-        text("H",cellSize/1.92,(cellSize/2.2)+2);
+        text("H",(cellSize/1.92)-0.5,(cellSize/2.2)+2);
         break;
     }
     popMatrix();

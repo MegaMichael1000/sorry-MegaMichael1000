@@ -130,21 +130,21 @@ void draw() {
     textAlign(CENTER,CENTER);
     if (ACTIVE_PLAYERS[0]) {
       fill(0);
-      text(start[0],185,138);
+      text(start[0],185,141);
       if (winner == 0)
         fill(255,0,0);
-      text(home[0],160,251);
+      text(home[0],160,254);
     }
     if (ACTIVE_PLAYERS[1]) {
       fill(0);
-      text(start[1],449,192);
+      text(start[1],449,195);
       if (winner == 1)
         fill(0,0,255);
-      text(home[1],335,168);
+      text(home[1],335,171);
     }
     if (ACTIVE_PLAYERS[2]) {
       fill(0);
-      text(start[2],394,455);
+      text(start[2],394,458);
       if (TEAMS) {
         if (winner == 0)
           fill(255,255,0);
@@ -152,11 +152,11 @@ void draw() {
         if (winner == 2)
           fill(255,255,0);
       }
-      text(home[2],417,342);
+      text(home[2],417,345);
     }
     if (ACTIVE_PLAYERS[3]) {
       fill(0);
-      text(start[3],130,401);
+      text(start[3],130,404);
       if (TEAMS) {
         if (winner == 1)
           fill(0,255,0);
@@ -164,7 +164,7 @@ void draw() {
         if (winner == 3)
           fill(0,255,0);
       }
-      text(home[3],244,425);
+      text(home[3],244,428);
     }
     if (card1 != null) {
       textSize(16);

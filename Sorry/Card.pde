@@ -129,7 +129,7 @@ public class Card {
     }
     textAlign(CENTER,CENTER);
     if (value == 13) {
-      textSize(30);
+      textSize(28);
       text("SORRY!",0,-1);
     } else {
       textSize(50);

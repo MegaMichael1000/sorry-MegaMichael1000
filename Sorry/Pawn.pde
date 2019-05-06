@@ -140,7 +140,7 @@ public class Pawn extends BoardItem {
       fill(0);
       textSize(30);
       textAlign(CENTER,CENTER);
-      text(value,cellSize/1.92,cellSize/2.4);
+      text(value,cellSize/1.92,(cellSize/2.4)+1.75);
     }
     popMatrix();
   }
