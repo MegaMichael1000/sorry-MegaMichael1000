@@ -17,7 +17,15 @@ header {
 }
 
 footer {
-	font-style: italic;
-	font-size: 90%;
+	
 }
 
+inst {
+    font-size: 25px;
+    font-weight: bold;
+}
+
+ul {
+    text-align:left;
+    position: relative;
+}
