@@ -460,14 +460,14 @@ public class Board {
       if (teams) {
         if ((movingPawn.row() == row && movingPawn.col() == col) && (movingPawn.getId() % 2 == id % 2 && movingPawn.isValidForward())) {
           if (!movingPawn.isActive() && !movingPawn.isSelected()) {
-            movingPawn.moveForward(spaces);
+            movingPawn.moveForward(spaces,true);
             return true;
           }
         }
       } else {
         if ((movingPawn.row() == row && movingPawn.col() == col) && (movingPawn.getId() == id && movingPawn.isValidForward())) {
           if (!movingPawn.isActive() && !movingPawn.isSelected()) {
-            movingPawn.moveForward(spaces); //<>//
+            movingPawn.moveForward(spaces,true); //<>//
             return true;
           }
         }
@@ -481,12 +481,12 @@ public class Board {
       Pawn movingPawn = pawns.get(i);
       if (teams) {
         if ((movingPawn.row() == row && movingPawn.col() == col) && (movingPawn.getId() % 2 == id % 2) && movingPawn.isValidBackward()) {
-          movingPawn.moveBackward(spaces);
+          movingPawn.moveBackward(spaces,true);
           return true;
         }
       } else {
         if ((movingPawn.row() == row && movingPawn.col() == col) && (movingPawn.getId() == id) && movingPawn.isValidBackward()) {
-          movingPawn.moveBackward(spaces);
+          movingPawn.moveBackward(spaces,true);
           return true;
         }
       }
@@ -522,7 +522,7 @@ public class Board {
     }
     pawn1.updateRow(row2);
     pawn1.updateCol(col2);
-    pawn1.moveForward(1);
+    pawn1.moveForward(1,false);
     return true;
   }
   
@@ -544,7 +544,7 @@ public class Board {
     for (int i=0; i<pawns.size(); i++) {
       Pawn p1 = pawns.get(i);
       if (p1.slideActive()) {
-        p1.moveForward(1);
+        p1.moveForward(1,true);
         for (Slide s: slides) {
           if (p1.row() == s.row() && p1.col() == s.col()) {
             if (s.getType() == 1)
@@ -633,8 +633,8 @@ public class Board {
         }
       }
     }
-    pawn1.moveForward(spaces);
-    pawn2.moveForward(split);
+    pawn1.moveForward(spaces,true);
+    pawn2.moveForward(split,true);
     for (Slide s: slides) {
       if (pawn1.row() == s.row() && pawn1.col() == s.col()) {
         if (s.getType() == 0 && s.getPlayer() != pawn1.getId())
@@ -678,7 +678,7 @@ public class Board {
     inspector1.updateRow(-1);
     inspector1.updateCol(-1);
   }
-  
+  /*
   public boolean validatingMove(int row, int col, int spaces, int id) {
     for (int i=0; i<pawns.size(); i++) {
       Pawn movingPawn = pawns.get(i);
@@ -695,7 +695,7 @@ public class Board {
     }
     return false;
   }
-  
+  */
   public int[] getCoords(int xClicked, int yClicked) {
     int[] coords = new int[2];
     xClicked -= x_pos;

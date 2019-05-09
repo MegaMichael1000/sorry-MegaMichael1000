@@ -10,6 +10,7 @@ public class Pawn extends BoardItem {
   protected boolean selected;
   protected boolean showingValue;
   protected boolean slide;
+  protected boolean slidable;
   protected boolean lead;
   protected int[][] redData = {
     {8  ,7  ,6  ,65 ,64 ,63 ,62 ,61 ,60 ,59 ,58 ,57 ,56 ,55 ,54 ,53},
@@ -93,6 +94,7 @@ public class Pawn extends BoardItem {
     validBackward = false;
     showingValue = false;
     slide = false;
+    slidable = false;
     value = 0;
     active = false;
     selected = false;
@@ -145,9 +147,10 @@ public class Pawn extends BoardItem {
     popMatrix();
   }
   
-  public void moveForward(int value) {
+  public void moveForward(int value, boolean canSlide) {
     active = false;
     selected = false;
+    slidable = canSlide;
     for (int i=0; i<value; i++) {
       if (safetyZone) {
         switch (playerId) {
@@ -201,9 +204,10 @@ public class Pawn extends BoardItem {
     spacesLeft = spaceMap[rowId][colId];
   }
   
-  public void moveBackward(int value) {
+  public void moveBackward(int value, boolean canSlide) {
     active = false;
     selected = false;
+    slidable = canSlide;
     for (int i=0; i<value; i++) {
       if (safetyZone) {
         switch (playerId) {
@@ -245,6 +249,16 @@ public class Pawn extends BoardItem {
     spacesLeft = spaceMap[rowId][colId];
   }
   
+  public void updateCol(int newCol) {
+    slidable = false;
+    colId = newCol;
+  }
+  
+  public void updateRow(int newRow) {
+    slidable = false;
+    rowId = newRow;
+  }
+  
   public void setValue() {
     active = true;
     if (value == 6)
@@ -257,7 +271,10 @@ public class Pawn extends BoardItem {
   public void validateBackward() {validBackward = true;}
   public void updateSpaces() {spacesLeft = spaceMap[rowId][colId];}
   
-  public void startSlide() {slide = true;}
+  public void startSlide() {
+    if (slidable)
+      slide = true;
+  }
   public void endSlide() {slide = false;}
   
   public void activate() {

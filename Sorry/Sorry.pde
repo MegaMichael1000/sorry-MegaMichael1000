@@ -32,6 +32,7 @@ boolean PAWN_HOME;
 boolean DRAWN_CARD;
 boolean DRAWN_THREE;
 boolean SLIDE;
+boolean CAN_SLIDE;
 boolean WAITING;
 boolean TURN_SKIPPED;
 boolean TURN_SKIPPED2;
@@ -48,6 +49,7 @@ void setup() {
   size(980,600);
   winner = -2;
   DRAWN_CARD = false;
+  CAN_SLIDE = false;
   movedPawn1 = null;
   movedPawn2 = null;
   mouseCoords = new int[2];
