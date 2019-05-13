@@ -477,7 +477,7 @@ void mousePressed() {
             movedPawn1 = gameBoard.findPawn(mouseCoords[0],mouseCoords[1]);
             VALID_MOVE = gameBoard.validateBackward(mouseCoords[0],mouseCoords[1],card1.cardValue());
             if (VALID_MOVE)
-              MOVED_PAWN = gameBoard.pawnBackward(mouseCoords[0],mouseCoords[1],card1.cardValue(),playerTurn,TEAMS);
+              MOVED_PAWN = gameBoard.pawnBackward(mouseCoords[0],mouseCoords[1],card1.cardValue(),playerTurn,TEAMS,true);
           } else if (card1.cardValue() == 7) {
             if (splitSpaces > 0) {
               movedPawn1 = gameBoard.findPawn(mouseCoords[0],mouseCoords[1]);
@@ -580,7 +580,7 @@ void mousePressed() {
             if (targetPawn != -1 && targetPawn % 2 != playerTurn % 2) {
               VALID_MOVE = gameBoard.validateBackward(mouseCoords[0],mouseCoords[1],8);
               if (VALID_MOVE)
-                MOVED_PAWN = gameBoard.pawnBackward(mouseCoords[0],mouseCoords[1],8,targetPawn,TEAMS);
+                MOVED_PAWN = gameBoard.pawnBackward(mouseCoords[0],mouseCoords[1],8,targetPawn,TEAMS,false);
               bumpCheck(SPLIT);
               slidePawns();
             }
@@ -589,7 +589,7 @@ void mousePressed() {
           movedPawn1 = gameBoard.findPawn(mouseCoords[0],mouseCoords[1]);
           VALID_MOVE = gameBoard.validateBackward(mouseCoords[0],mouseCoords[1],1);
           if (VALID_MOVE)
-            MOVED_PAWN = gameBoard.pawnBackward(mouseCoords[0],mouseCoords[1],1,playerTurn,TEAMS);
+            MOVED_PAWN = gameBoard.pawnBackward(mouseCoords[0],mouseCoords[1],1,playerTurn,TEAMS,true);
           bumpCheck(SPLIT);
           slidePawns();
         } else if (card1.cardValue() == 11) {
@@ -925,8 +925,15 @@ boolean checkCard(Card theCard) {
       validMoves += 1;
   } else if (theCard.cardValue() == 8) {
     validMoves = gameBoard.validateTotalForward(playerTurn,theCard.cardValue(),TEAMS);
-    if (SPECIAL_CARDS && theCard.cardSpecialPlayer() % 2 == playerTurn % 2)
-      validMoves += gameBoard.fullOpponentCount(playerTurn);
+    if (SPECIAL_CARDS && theCard.cardSpecialPlayer() % 2 == playerTurn % 2) {
+      if (playerTurn % 2 == 0) {
+        validMoves += gameBoard.validateTotalBackward(1,theCard.cardValue(),TEAMS);
+        validMoves += gameBoard.validateTotalBackward(3,theCard.cardValue(),TEAMS);
+      } else {
+        validMoves += gameBoard.validateTotalBackward(0,theCard.cardValue(),TEAMS);
+        validMoves += gameBoard.validateTotalBackward(2,theCard.cardValue(),TEAMS);
+      }
+    }
   } else if (theCard.cardValue() == 10) {
     validMoves = gameBoard.validateTotalForward(playerTurn,theCard.cardValue(),TEAMS);
     validMoves += gameBoard.validateTotalBackward(playerTurn,1,TEAMS);

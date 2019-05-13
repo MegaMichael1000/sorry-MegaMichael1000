@@ -476,17 +476,17 @@ public class Board {
     return false;
   }
   
-  public boolean pawnBackward(int row, int col, int spaces, int id, boolean teams) {
+  public boolean pawnBackward(int row, int col, int spaces, int id, boolean teams, boolean isPlayerTurn) {
     for (int i=0; i<pawns.size(); i++) {
       Pawn movingPawn = pawns.get(i);
       if (teams) {
         if ((movingPawn.row() == row && movingPawn.col() == col) && (movingPawn.getId() % 2 == id % 2) && movingPawn.isValidBackward()) {
-          movingPawn.moveBackward(spaces,true);
+          movingPawn.moveBackward(spaces,isPlayerTurn);
           return true;
         }
       } else {
         if ((movingPawn.row() == row && movingPawn.col() == col) && (movingPawn.getId() == id) && movingPawn.isValidBackward()) {
-          movingPawn.moveBackward(spaces,true);
+          movingPawn.moveBackward(spaces,isPlayerTurn);
           return true;
         }
       }
