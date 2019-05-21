@@ -54,23 +54,33 @@ void setup() {
   movedPawn2 = null;
   mouseCoords = new int[2];
   selectedPawn = new int[2];
+  
+  // START and HOME int arrays to keep track of pawns at START and HOME
   start = new int[4];
   home = new int[4];
   for (int i=0; i<4; i++) {
     start[i] = 3;
     home[i] = 0;
   }
+  
+  // 16x16 int array to help track the pawns
   boardData = new int[16][16];
   for (int i=0; i<boardData.length; i++) {
     for (int j=0; j<boardData[i].length; j++) {
       boardData[i][j] = -1;
     }
   }
+  
+  // Sets data for 1 pawn out of start
   boardData[0][4] = 0;
   boardData[4][15] = 1;
   boardData[15][11] = 2;
   boardData[11][0] = 3;
+  
+  // Board layout
   gameBoard = new Board(width/20,height/10,16,16,30);
+  
+  // START spaces
   space1 = new Space(1,4,1,0);
   gameBoard.addSpace(space1);
   space1 = new Space(4,14,1,1);
@@ -79,6 +89,8 @@ void setup() {
   gameBoard.addSpace(space1);
   space1 = new Space(11,1,1,3);
   gameBoard.addSpace(space1);
+  
+  // Safety Zones
   for (int i=0; i<4; i++) {
     for (int j=0; j<5; j++) {
       switch(i) {
@@ -97,6 +109,8 @@ void setup() {
       gameBoard.addSpace(space1);
     }
   }
+  
+  // Normal Spaces
   for (int i=0; i<16; i++) {
     space1 = new Space(0,i,0,-1);
     space2 = new Space(15,i,0,-1);
@@ -109,6 +123,8 @@ void setup() {
     gameBoard.addSpace(space1);
     gameBoard.addSpace(space2);
   }
+  
+  // HOME spaces
   space1 = new Space(6,2,2,0);
   gameBoard.addSpace(space1);
   space1 = new Space(2,9,2,1);
@@ -118,6 +134,8 @@ void setup() {
   space1 = new Space(13,6,2,3);
   gameBoard.addSpace(space1);
   
+  
+  // Initializing Cards
   card1 = null;
   card2 = null;
   card3 = null;
@@ -125,6 +143,8 @@ void setup() {
 
 void draw() {
   background(150);
+  
+  // In-game
   if (winner >= -1) {
     gameBoard.show();
     fill(0);
@@ -230,6 +250,7 @@ void draw() {
           break;
       }
     } else {
+      // Displays the winner at the end of the game
       if (TEAMS) {
         if (winner == 0)
           text("Red and Yellow win!",300,25);
@@ -252,6 +273,8 @@ void draw() {
         }
       }
     }
+  
+  // Main menu
   } else {
     fill(100);
     noStroke();
@@ -311,17 +334,22 @@ void draw() {
 
 void mousePressed() {
   mouseCoords = gameBoard.getCoords(mouseX,mouseY);
+  
+  // Makes sure the values in mouseCoords are ints, otherwise the game won't work in the browser
   if (mouseY >= height/10)
     mouseCoords[0] = (int)mouseCoords[0];
   if (mouseX >= width/20)
     mouseCoords[1] = (int)mouseCoords[1];
+  
+  
   if (winner == -1) {
     if (mouseButton == LEFT) {
+      
+      // Handling of cards
       if (mouseX >= 580 && mouseX <= 700) {
         if (mouseY >= (height/2)-80 && mouseY <= (height/2)+80) {
           if (!DRAWN_CARD) {
             drawOne();
-            //card1 = new Card(12,-1);
             DRAWN_CARD = true;
             TURN_SKIPPED = false;
             TURN_SKIPPED2 = false;
@@ -360,6 +388,8 @@ void mousePressed() {
             DRAWN_THREE = false;
           }
         }
+        
+      // Handling of Pawn Movement
       } else {
         if (DRAWN_CARD && !DRAWN_THREE && CARD_VALID) {
           if (card1.cardValue() == 1 || card1.cardValue() == 2) {
@@ -514,6 +544,7 @@ void mousePressed() {
         }
       }
       
+      // Ending a player's turn
       if (TURN_SKIPPED) {
         validMoves = -1;
         nextTurn();
@@ -536,6 +567,8 @@ void mousePressed() {
         gameBoard.checkLead();
         checkHome(playerTurn);
       }
+    
+    // Alternate functions of cards
     } else if (mouseButton == RIGHT) {
       if (DRAWN_CARD && validMoves > 0) {
         if (card1.cardValue() == 5) {
@@ -628,7 +661,11 @@ void mousePressed() {
         nextTurn();
       }
     }
+  
+  // Handling mouse clicks in the main menu
   } else if (winner == -2) {
+    
+    // Player selection
     if (mouseY >= 155 && mouseY <= 205) {
       if (mouseX >= 535 && mouseX <= 585) {
         if (!ACTIVE_PLAYERS[0]) {
@@ -666,6 +703,8 @@ void mousePressed() {
       if (TEAMS && players < 4) {
         TEAMS = false;
       }
+    
+    // Team game option
     } else if (mouseY >= 275 && mouseY <= 325) {
       if (mouseX >= 535 && mouseX <= 765) {
         if (!TEAMS) {
@@ -676,6 +715,8 @@ void mousePressed() {
           TEAMS = false;
         }
       }
+    
+    // Special cards option
     } else if (mouseY >= 215 && mouseY <= 265) {
       if (mouseX >= 535 && mouseX <= 765) {
         if (!SPECIAL_CARDS) {
@@ -684,6 +725,8 @@ void mousePressed() {
           SPECIAL_CARDS = false;
         }
       }
+    
+    // Starts the game
     } else if (mouseY >= 368 && mouseY <= 448) {
       if (mouseX >= 415 && mouseX <= 565) {
         gameDeck = new Deck(SPECIAL_CARDS);
@@ -712,12 +755,16 @@ void mousePressed() {
         }
       }
     }
+  
+  // Returns to the main menu if there are any clicks after a player has won
   } else {
     setup();
   }
 }
 
 void keyPressed() {
+  
+  // Cancels any selections made with 7, 11, or Special 5 cards
   if (keyCode == 32) {
     if (card1 != null) {
       if (card1.cardValue() == 7) {
@@ -731,16 +778,10 @@ void keyPressed() {
       gameBoard.resetSelection();
     }
   }
-  if (key == ESC) {
-    key = 0;
-    setup();
-  }
-  /*
-  if (key == 's')
-    card1 = new Card(12,0);
-  */
+  
 }
 
+// Chooses a player to go first at the start of the game
 void pickFirstPlayer() {
   playerTurn = (int)random(4);
   if (!ACTIVE_PLAYERS[playerTurn]) {
@@ -748,6 +789,7 @@ void pickFirstPlayer() {
   }
 }
 
+// Checks for any pawns on HOME
 void checkHome(int player) {
   PAWN_HOME = false;
   if (TEAMS) {
@@ -804,6 +846,7 @@ void checkHome(int player) {
   }
 }
 
+// Checks if a player has won the game
 void winCheck() {
   if (TEAMS) {
     if (home[0] + home[2] == 8)
@@ -822,6 +865,7 @@ void winCheck() {
   }
 }
 
+// Moves on to the next player's turn
 void nextTurn() {
   MOVED_PAWN = false;
   SKIPPABLE = false;
@@ -849,6 +893,7 @@ void nextTurn() {
     nextTurn();
 }
 
+// Handles slides on the game side
 void slidePawns() {
   gameBoard.slideCheck();
   SLIDE = gameBoard.slidingPawns();
@@ -866,6 +911,7 @@ void slidePawns() {
   }
 }
 
+// Draws a card to play
 void drawOne() {
   if (!DRAWN_CARD) {
     DRAWN_CARD = true;
@@ -878,6 +924,7 @@ void drawOne() {
   }
 }
 
+// Draws three cards in the event of a player using their special 3
 void drawThree() {
   DRAWN_THREE = true;
   card1 = gameDeck.drawCard(card);
@@ -900,6 +947,7 @@ void drawThree() {
   }
 }
 
+// Checks to see if a card can be played properly
 boolean checkCard(Card theCard) {
   if (theCard.cardValue() == 1 || theCard.cardValue() == 2) {
     validMoves = gameBoard.validateTotalForward(playerTurn,theCard.cardValue(),TEAMS);
@@ -965,6 +1013,7 @@ boolean checkCard(Card theCard) {
   return false;
 }
 
+// Checks for any pawns that have been bumped back to START
 void bumpCheck(boolean sevenSplit) {
   if (movedPawn1 != null) {
     switch (movedPawn1.getId()) {

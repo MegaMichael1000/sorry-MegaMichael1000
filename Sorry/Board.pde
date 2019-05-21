@@ -25,6 +25,8 @@ public class Board {
     spaces = new ArrayList<Space>();
     pawns = new ArrayList<Pawn>();
     slides = new ArrayList<Slide>();
+    
+    // Slide spaces
     theSlide = new Slide(0,1,0,0,3);
     slides.add(theSlide);
     theSlide = new Slide(0,4,0,1,0);
@@ -76,10 +78,8 @@ public class Board {
     }
     xAt = inspector1.col()*cellSize;
     yAt = inspector1.row()*cellSize;
-    //inspector1.show(xAt,yAt,cellSize);
     xAt = inspector2.col()*cellSize;
     yAt = inspector2.row()*cellSize;
-    //inspector2.show(xAt,yAt,cellSize);
     for (Space s: spaces) {
       xAt = s.col()*cellSize;
       yAt = s.row()*cellSize;
@@ -182,6 +182,55 @@ public class Board {
     return false;
   }
   
+  public boolean validateForward(int row, int col, int value) {
+    Pawn checkedPawn1 = findPawn(row,col);
+    if (checkedPawn1 != null && checkedPawn1.spacesRemaining() >= value) {
+      inspector1 = new Inspector(row,col,checkedPawn1.getId(),checkedPawn1.inSafetyZone());
+      inspector1.moveForward(value);
+      Pawn checkedPawn2 = findPawn(inspector1.row(),inspector1.col());
+      if (checkedPawn2 == null) {
+        if ((inspector1.row() == 6 && inspector1.col() == 2) && checkedPawn1.getId() == 0) {
+          inspector1.updateRow(-1);
+          inspector1.updateCol(-1);
+        } else if ((inspector1.row() == 2 && inspector1.col() == 9) && checkedPawn1.getId() == 1) {
+          inspector1.updateRow(-1);
+          inspector1.updateCol(-1);
+        } else if ((inspector1.row() == 9 && inspector1.col() == 13) && checkedPawn1.getId() == 2) {
+          inspector1.updateRow(-1);
+          inspector1.updateCol(-1);
+        } else if ((inspector1.row() == 13 && inspector1.col() == 6) && checkedPawn1.getId() == 3) {
+          inspector1.updateRow(-1);
+          inspector1.updateCol(-1);
+        }
+        checkedPawn1.validateForward();
+        return true;
+      }
+      if (checkedPawn2.isActive() || checkedPawn2.getId() != checkedPawn1.getId()) {
+        checkedPawn1.validateForward();
+        return true;
+      }
+    }
+    return false;
+  }
+  
+  public boolean validateBackward(int row, int col, int value) {
+    Pawn checkedPawn1 = findPawn(row,col);
+    if (checkedPawn1 != null) { 
+      inspector1 = new Inspector(row,col,checkedPawn1.getId(),checkedPawn1.inSafetyZone());
+      inspector1.moveBackward(value);
+      Pawn checkedPawn2 = findPawn(inspector1.row(),inspector1.col());
+      if (checkedPawn2 == null) {
+        checkedPawn1.validateBackward();
+        return true;
+      }
+      if (checkedPawn2.getId() != checkedPawn1.getId()) {
+        checkedPawn1.validateBackward();
+        return true;
+      }
+    }
+    return false;
+  }
+  
   public int validateTotalForward(int player, int value, boolean teams) {
     int validPawns = 0;
     for (Pawn p: pawns) {
@@ -254,97 +303,13 @@ public class Board {
       }
     }
     if (spaces >= 7) {
-      if (teams) {
-        if ((four == 0 && high == 0) && spaces == 12)
-          return false;
-        if (three == 0 && high == 0)
-          return false;
-      } else {
-        if (spaces == 7 && pawnsActive > 2)
-          return false;
-      }
+      if ((four == 0 && high == 0) && spaces == 12)
+        return false;
+      if (three == 0 && high == 0)
+        return false;
+      if (spaces == 7 && pawnsActive > 2)
+        return false;
       return true;
-    }
-    return false;
-  }
-  
-  public boolean validateForward(int row, int col, int value) {
-    Pawn checkedPawn1 = findPawn(row,col);
-    if (checkedPawn1 != null && checkedPawn1.spacesRemaining() >= value) {
-      inspector1 = new Inspector(row,col,checkedPawn1.getId(),checkedPawn1.inSafetyZone());
-      inspector1.moveForward(value);
-      Pawn checkedPawn2 = findPawn(inspector1.row(),inspector1.col());
-      if (checkedPawn2 == null) {
-        if ((inspector1.row() == 6 && inspector1.col() == 2) && checkedPawn1.getId() == 0) {
-          inspector1.updateRow(-1);
-          inspector1.updateCol(-1);
-        } else if ((inspector1.row() == 2 && inspector1.col() == 9) && checkedPawn1.getId() == 1) {
-          inspector1.updateRow(-1);
-          inspector1.updateCol(-1);
-        } else if ((inspector1.row() == 9 && inspector1.col() == 13) && checkedPawn1.getId() == 2) {
-          inspector1.updateRow(-1);
-          inspector1.updateCol(-1);
-        } else if ((inspector1.row() == 13 && inspector1.col() == 6) && checkedPawn1.getId() == 3) {
-          inspector1.updateRow(-1);
-          inspector1.updateCol(-1);
-        }
-        checkedPawn1.validateForward();
-        return true;
-      }
-      if (checkedPawn2.isActive() || checkedPawn2.getId() != checkedPawn1.getId()) {
-        checkedPawn1.validateForward();
-        return true;
-      }
-    }
-    return false;
-  }
-  
-  public boolean validateBackward(int row, int col, int value) {
-    Pawn checkedPawn1 = findPawn(row,col);
-    if (checkedPawn1 != null) { 
-      inspector1 = new Inspector(row,col,checkedPawn1.getId(),checkedPawn1.inSafetyZone());
-      inspector1.moveBackward(value);
-      Pawn checkedPawn2 = findPawn(inspector1.row(),inspector1.col());
-      if (checkedPawn2 == null) {
-        checkedPawn1.validateBackward();
-        return true;
-      }
-      if (checkedPawn2.getId() != checkedPawn1.getId()) {
-        checkedPawn1.validateBackward();
-        return true;
-      }
-    }
-    return false;
-  }
-  
-  public boolean validateColor(int row, int col, int player) {
-    Pawn checkedPawn1 = findPawn(row,col);
-    if (checkedPawn1 != null) {
-      inspector1 = new Inspector(row,col,player,checkedPawn1.inSafetyZone());
-      inspector1.moveForward(1);
-      Pawn checkedPawn2 = findPawn(inspector1.row(),inspector1.col());
-      if (checkedPawn2 == null) {
-        
-        if ((inspector1.row() == 6 && inspector1.col() == 2) && checkedPawn1.getId() == 0) {
-          inspector1.updateRow(-1);
-          inspector1.updateCol(-1);
-        } else if ((inspector1.row() == 2 && inspector1.col() == 9) && checkedPawn1.getId() == 1) {
-          inspector1.updateRow(-1);
-          inspector1.updateCol(-1);
-        } else if ((inspector1.row() == 9 && inspector1.col() == 13) && checkedPawn1.getId() == 2) {
-          inspector1.updateRow(-1);
-          inspector1.updateCol(-1);
-        } else if ((inspector1.row() == 13 && inspector1.col() == 6) && checkedPawn1.getId() == 3) {
-          inspector1.updateRow(-1);
-          inspector1.updateCol(-1);
-        }
-        checkedPawn1.validateForward();
-        return true;
-      }
-      if (checkedPawn2.getId() != player) {
-        checkedPawn1.validateForward();
-        return true;
-      }
     }
     return false;
   }
@@ -517,7 +482,7 @@ public class Board {
     if (pawn1.getId() % 2 == pawn2.getId() % 2) {
       return false;
     }
-    if (!validateColor(row2,col2,pawn1.getId())) {
+    if (!validateForward(row2,col2,pawn1.getId())) {
       return false;
     }
     pawn1.updateRow(row2);
@@ -678,24 +643,7 @@ public class Board {
     inspector1.updateRow(-1);
     inspector1.updateCol(-1);
   }
-  /*
-  public boolean validatingMove(int row, int col, int spaces, int id) {
-    for (int i=0; i<pawns.size(); i++) {
-      Pawn movingPawn = pawns.get(i);
-      if ((movingPawn.row() == row && movingPawn.col() == col) && movingPawn.getId() == id && movingPawn.isValidForward()) {
-        inspector2 = new Inspector(movingPawn.row(),movingPawn.col(),movingPawn.getId(),movingPawn.inSafetyZone());
-        inspector2.moveForward(spaces);
-        if ((inspector1.row() == inspector2.row()) && (inspector1.col() == inspector2.col())) {
-          return false;
-        } else {
-          movingPawn.moveForward(spaces);
-          return true;
-        }
-      }
-    }
-    return false;
-  }
-  */
+  
   public int[] getCoords(int xClicked, int yClicked) {
     int[] coords = new int[2];
     xClicked -= x_pos;
