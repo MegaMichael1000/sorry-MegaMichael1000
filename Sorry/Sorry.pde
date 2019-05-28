@@ -250,6 +250,7 @@ void draw() {
           break;
       }
     } else {
+      
       // Displays the winner at the end of the game
       if (TEAMS) {
         if (winner == 0)

@@ -13,6 +13,7 @@ public class Board {
   ArrayList<Pawn> pawns;
   ArrayList<Slide> slides;
   
+  // Initialization of Game Board
   public Board(int x, int y, int numRows, int numCols, int cellSize) {
     x_pos = x;
     y_pos = y;
@@ -98,10 +99,12 @@ public class Board {
     popMatrix();
   }
   
+  // Adds spaces to board
   public void addSpace(Space s) {
     spaces.add(s);
   }
   
+  // Adds pawns to board
   public void addPawn(Pawn p) {
     pawns.add(p);
   }
@@ -123,6 +126,7 @@ public class Board {
     this.layer = theLayer;
   }
   
+  // Returns the number of pawns a player or team has active (Safety zone included)
   public int pawnCount(int player, boolean teams) {
     int count = 0;
     for (Pawn p: pawns) {
@@ -137,6 +141,7 @@ public class Board {
     return count;
   }
   
+  // Returns the number of pawns a player or team has active (Safety zone not included)
   public int boardPawnCount(int player, boolean teams) {
     int count = 0;
     for (Pawn p: pawns) {
@@ -151,6 +156,7 @@ public class Board {
     return count;
   }
   
+  // Returns the number of pawns the opposing players or team has active (Safety zone not included)
   public int opponentCount(int player, boolean teams) {
     int count = 0;
     for (Pawn p: pawns) {
@@ -165,15 +171,7 @@ public class Board {
     return count;
   }
   
-  public int fullOpponentCount(int player) {
-    int count = 0;
-    for (Pawn p: pawns) {
-      if (p.getId() % 2 != player % 2)
-        count++;
-    }
-    return count;
-  }
-  
+  // Checks if the pawn is selected
   public boolean selectedPawn() {
     for (Pawn p: pawns) {
       if (p.isSelected())
@@ -182,6 +180,7 @@ public class Board {
     return false;
   }
   
+  // Checks if the pawn can move forward legally
   public boolean validateForward(int row, int col, int value) {
     Pawn checkedPawn1 = findPawn(row,col);
     if (checkedPawn1 != null && checkedPawn1.spacesRemaining() >= value) {
@@ -213,6 +212,7 @@ public class Board {
     return false;
   }
   
+  // Checks if the pawn can move backward legally
   public boolean validateBackward(int row, int col, int value) {
     Pawn checkedPawn1 = findPawn(row,col);
     if (checkedPawn1 != null) { 
@@ -231,6 +231,7 @@ public class Board {
     return false;
   }
   
+  // Returns the number of pawns that can move forward legally
   public int validateTotalForward(int player, int value, boolean teams) {
     int validPawns = 0;
     for (Pawn p: pawns) {
@@ -303,10 +304,16 @@ public class Board {
       }
     }
     if (spaces >= 7) {
-      if ((four == 0 && high == 0) && spaces == 12)
+      if (four == 0 && high == 0)
         return false;
-      if (three == 0 && high == 0)
-        return false;
+      if (three == 0 && high == 0) {
+        if (one == 2) {
+          return false;
+        }
+        if (two > 0) {
+          
+        }
+      }
       if (spaces == 7 && pawnsActive > 2)
         return false;
       return true;
