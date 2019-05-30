@@ -250,6 +250,7 @@ public class Board {
     return validPawns;
   }
   
+  // Returns the number of pawns that can move backward legally
   public int validateTotalBackward(int player, int value, boolean teams) {
     int validPawns = 0;
     for (Pawn p: pawns) {
@@ -267,7 +268,8 @@ public class Board {
     }
     return validPawns;
   }
-
+  
+  // Checks if a legal move can be made with a 7 card
   public boolean validateSeven(int player, boolean teams) {
     int spaces = 0;
     int one = 0;
@@ -318,6 +320,7 @@ public class Board {
     return false;
   }
   
+  // Resets any selections made with a 7, 11, or special 5
   public void resetSelection() {
     for (Pawn p: pawns) {
       p.deactivate();
@@ -325,6 +328,7 @@ public class Board {
     }
   }
   
+  // Sets each active player's leading pawn
   public void checkLead() {
     for (int i=0; i<4; i++) {
       int leadSpaces = 100;
@@ -344,6 +348,7 @@ public class Board {
     }
   }
   
+  // Selects a pawn for use with an 11 or special 5
   public boolean selectPawn(int row, int col, int player, boolean teams) {
     Pawn p1 = findPawn(row,col);
     for (Pawn p2: pawns) {
@@ -362,6 +367,7 @@ public class Board {
     return true;
   }
   
+  // Swaps the positions of 2 pawns on the board
   public boolean switchPawns(int row1, int col1, int row2, int col2, boolean teams) {
     Pawn pawn1 = findPawn(row1,col1);
     Pawn pawn2 = findPawn(row2,col2);
@@ -387,6 +393,7 @@ public class Board {
     return true;
   }
   
+  // "Sorry" function - puts a player's pawn in the place of another player, sending them back to start
   public Pawn sorry(int row, int col, int player) {
     Pawn sorryPawn = findPawn(row,col);
     if (sorryPawn == null)
@@ -400,6 +407,7 @@ public class Board {
     return thePawn;
   }
   
+  // Returns the pawn at the given space
   public Pawn findPawn(int row, int col) {
     for (int i=0; i<pawns.size(); i++) {
       Pawn checkedPawn = pawns.get(i);
@@ -410,8 +418,10 @@ public class Board {
     return null;
   }
   
+  // Clears the ArrayList of pawns on the board
   public void purge() {pawns.clear();}
   
+  // Removes a pawn from the board
   public boolean removePawn(int row, int col) {
     for (int i=0; i<pawns.size(); i++) {
       Pawn checkedPawn = pawns.get(i);
@@ -423,6 +433,7 @@ public class Board {
     return false;
   }
   
+  // Moves a pawn forward
   public boolean pawnForward(int row, int col, int spaces, int id, boolean teams) {
     for (int i=0; i<pawns.size(); i++) {
       Pawn movingPawn = pawns.get(i);
@@ -445,6 +456,7 @@ public class Board {
     return false;
   }
   
+  // Moves a pawn backward
   public boolean pawnBackward(int row, int col, int spaces, int id, boolean teams, boolean isPlayerTurn) {
     for (int i=0; i<pawns.size(); i++) {
       Pawn movingPawn = pawns.get(i);
@@ -463,6 +475,7 @@ public class Board {
     return false;
   }
   
+  // Checks for sliding pawns on the board
   public void slideCheck() {
     for (Pawn p: pawns) {
       for (Slide s: slides) {
@@ -474,6 +487,7 @@ public class Board {
     }
   }
   
+  // Places your pawn one space ahead of an opponent's pawn
   public boolean moveAhead(int row1, int col1, int row2, int col2) {
     Pawn pawn1 = findPawn(row1,col1);
     Pawn pawn2 = findPawn(row2,col2);
@@ -495,6 +509,7 @@ public class Board {
     return true;
   }
   
+  // Moves a pawn to home instantly
   public boolean instantHome(int row, int col, int id) {
     for (int i=0; i<pawns.size(); i++) {
       Pawn movingPawn = pawns.get(i);
@@ -508,6 +523,7 @@ public class Board {
     return false;
   }
   
+  // Moves a sliding pawn forward
   public int slideMove() {
     int pawnHit = -1;
     for (int i=0; i<pawns.size(); i++) {
@@ -535,6 +551,7 @@ public class Board {
     return pawnHit;
   }
   
+  // Checks if the board has any sliding pawns
   public boolean slidingPawns() {
     for (Pawn p: pawns) {
       if (p.slideActive())
@@ -543,6 +560,7 @@ public class Board {
     return false;
   }
   
+  // Bumps a pawn back to start
   public int bumpPawn(int player) {
     int pawnId = -1;
     for (int i=0; i<pawns.size(); i++) {
@@ -563,6 +581,7 @@ public class Board {
     return pawnId;
   }
   
+  // Special move code for the 7 card
   public boolean splitMove(int row, int col, int spaces, int id, boolean teams) {
     Pawn pawn1 = findPawn(row,col);
     Pawn pawn2 = null;
@@ -617,6 +636,7 @@ public class Board {
     return true;
   }
   
+  // Gets the value a pawn has been assigned with a 7 card
   public int splitValue() {
     for (Pawn p: pawns) {
       if (p.getValue() != 0)
@@ -625,6 +645,7 @@ public class Board {
     return 0;
   }
   
+  // Assigns a split value to a pawn with a 7 card
   public void splitPawn(int row, int col, int player, boolean teams) {
     Pawn targetPawn = findPawn(row,col);
     for (Pawn p: pawns) {
@@ -643,11 +664,13 @@ public class Board {
     }
   }
   
+  // Resets the inspectors
   public void resetInspector() {
     inspector1.updateRow(-1);
     inspector1.updateCol(-1);
   }
   
+  // Returns a 2-int array of the coordinates clicked on the game board
   public int[] getCoords(int xClicked, int yClicked) {
     int[] coords = new int[2];
     xClicked -= x_pos;
