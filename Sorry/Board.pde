@@ -310,9 +310,6 @@ public class Board {
         if (one == 2) {
           return false;
         }
-        if (two > 0) {
-          
-        }
       }
       if (spaces == 7 && pawnsActive > 2)
         return false;
